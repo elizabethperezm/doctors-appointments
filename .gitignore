@@ -11,3 +11,4 @@ node_modules/
 .github/
 .playwright-mcp/
 .DS_Store
+src/.DS_Store
