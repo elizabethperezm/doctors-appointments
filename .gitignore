@@ -12,3 +12,4 @@ node_modules/
 .playwright-mcp/
 .DS_Store
 src/.DS_Store
+.DS_Store
