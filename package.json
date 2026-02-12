@@ -3,7 +3,9 @@
   "type": "module",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "lint": "node ./node_modules/eslint/bin/eslint.js ."
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -11,6 +13,8 @@
   "devDependencies": {
     "@playwright/test": "^1.56.1",
     "@types/node": "^24.10.1",
-    "dotenv": "^17.2.3"
+    "dotenv": "^17.2.3",
+    "eslint": "^10.0.0",
+    "globals": "^17.3.0"
   }
 }
