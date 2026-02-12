@@ -1,0 +1,58 @@
+# Nombre del workflow (lo verás como “Playwright Tests” en la pestaña Actions)
+name: Playwright Tests
+
+# Cuándo se ejecuta
+on:
+  # Se ejecuta cuando haces push directo a master
+  push:
+    branches: [ master ]
+
+  # Se ejecuta cuando abres/actualizas un Pull Request hacia master
+  pull_request:
+    branches: [ master ]
+
+# Conjunto de trabajos (jobs). 
+jobs:
+  test:
+    # Máximo de tiempo antes de que GitHub mate el job por timeout
+    timeout-minutes: 60
+
+    # Sistema operativo/runner donde corre el pipeline
+    runs-on: ubuntu-latest
+
+    # Pasos que se ejecutan en orden
+    steps:
+      # 1) Clona tu repo en el runner
+      - uses: actions/checkout@v4
+
+      # 2) Instala Node en el runner (para poder usar npm/npx)
+      - uses: actions/setup-node@v4
+        with:
+          # Usa la versión LTS más reciente disponible
+          node-version: lts/*
+
+      # 3) Instala dependencias EXACTAS del package-lock
+      - name: Install dependencies
+        run: npm ci
+
+      # 4) Instala navegadores y dependencias del sistema necesarias para Playwright en Linux
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      # 5) Corre las pruebas Playwright
+      - name: Run Playwright tests
+        run: npx playwright test
+        env:
+          # Variables de entorno consumidas por tu framework
+          # Están guardadas como Secrets en GitHub (Settings > Secrets and variables > Actions)
+          DASHBOARD_URL: ${{ secrets.DASHBOARD_URL }}
+          DOCTORS_URL: ${{ secrets.DOCTORS_URL }}
+          PATIENTS_URL: ${{ secrets.PATIENTS_URL }}
+
+      # 6) Subir reporte como artifact (evidencia) aunque los tests fallen
+      - uses: actions/upload-artifact@v4
+        if: always()   # esto hace que SIEMPRE intente subir el reporte (pase o falle)
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
