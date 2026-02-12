@@ -1,0 +1,29 @@
+name: Lint (ESLint)
+
+on:
+  # Corre en cualquier push a cualquier rama (incluye ramas nuevas)
+  push:
+    branches:
+      - "**"
+
+  # Opcional pero recomendado: también corre al abrir/actualizar PRs
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
