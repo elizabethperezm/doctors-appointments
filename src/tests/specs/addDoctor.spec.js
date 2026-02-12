@@ -4,6 +4,7 @@ import { doctorElizabeth } from '../data/doctors.data.js';
 
 test.describe('Add doctor', () => {
   let doctorsPage;
+  let =1;
 
   test.beforeEach(async ({ page }) => {
     doctorsPage = new DoctorsPage(page); 
